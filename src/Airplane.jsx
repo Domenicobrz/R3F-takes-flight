@@ -12,8 +12,10 @@ import { controls, updatePlaneAxis } from './controls';
 const x = new Vector3(1, 0, 0);
 const y = new Vector3(0, 1, 0);
 const z = new Vector3(0, 0, 1);
+const planePosition = new Vector3(0, 3, 0);
 
 const delayedRotMatrix = new Matrix4();
+const delayedQuaternion = new Quaternion();
 
 export function Airplane(props) {
   const { nodes, materials } = useGLTF('assets/models/airplane.glb');
@@ -21,25 +23,16 @@ export function Airplane(props) {
   const helixMeshRef = useRef();
 
   useFrame(({ camera }) => {
-    const rotMatrix = new Matrix4();
 
     updatePlaneAxis(x, y, z);
+    planePosition.add(z.clone().multiplyScalar(-0.006));
+    // planePosition.add(new Vector3(0,0,1).multiplyScalar(-0.01));
 
-    // rotMatrix.set(
-    //   x.x, x.y, x.z, 0, 
-    //   y.x, y.y, y.z, 0, 
-    //   z.x, z.y, z.z, 0, 
-    //   0, 0, 0, 1
-    // );
+    const rotMatrix = new Matrix4().makeBasis(x, y, z);
 
-    rotMatrix.set(
-      x.x, y.x, z.x, 0,
-      x.y, y.y, z.y, 0,
-      x.z, y.z, z.z, 0,
-      0, 0, 0, 1
-    );
-
-    const matrix = new Matrix4().multiply(rotMatrix);
+    const matrix = new Matrix4()
+    .multiply(new Matrix4().makeTranslation(planePosition.x, planePosition.y, planePosition.z))
+    .multiply(rotMatrix);
 
     groupRef.current.matrixAutoUpdate = false;
     groupRef.current.matrix.copy(matrix);
@@ -48,24 +41,44 @@ export function Airplane(props) {
 
 
 
-    var quaternionA = new Quaternion();
-    quaternionA.setFromRotationMatrix(delayedRotMatrix);
-    
+    var quaternionA = new Quaternion().copy(delayedQuaternion);
+    // careful! setting the quaternion from the rotation matrix will cause
+    // issues that resemble gimbal locks, instead, always use the quaternion notation
+    // throughout the slerping phase
+    // quaternionA.setFromRotationMatrix(delayedRotMatrix);
+
     var quaternionB = new Quaternion();
     quaternionB.setFromRotationMatrix(rotMatrix);
 
-    var interpolationFactor = 0.175; 
+    // if (quaternionA.dot(quaternionB) < 0) {
+    //   quaternionB.x = -quaternionB.x;
+    //   quaternionB.y = -quaternionB.y;
+    //   quaternionB.z = -quaternionB.z;
+    //   quaternionB.w = -quaternionB.w;
+    // }
+    // if (quaternionB.dot(quaternionA) < 0) {
+    //   quaternionA.x = -quaternionA.x;
+    //   quaternionA.y = -quaternionA.y;
+    //   quaternionA.z = -quaternionA.z;
+    //   quaternionA.w = -quaternionA.w;
+    // }
+
+
+    var interpolationFactor = 0.175;
     var interpolatedQuaternion = new Quaternion().copy(quaternionA);
     interpolatedQuaternion.slerp(quaternionB, interpolationFactor);
+    delayedQuaternion.copy(interpolatedQuaternion);
 
     delayedRotMatrix.identity();
-    delayedRotMatrix.makeRotationFromQuaternion(interpolatedQuaternion);
+    delayedRotMatrix.makeRotationFromQuaternion(delayedQuaternion);
 
     const cameraMatrix = new Matrix4()
+      .multiply(new Matrix4().makeTranslation(planePosition.x, planePosition.y, planePosition.z))
       .multiply(delayedRotMatrix)
+      // .multiply(rotMatrix)
       .multiply(new Matrix4().makeRotationX(-0.2))
       .multiply(
-        new Matrix4().makeTranslation(0, 0.2, 5)
+        new Matrix4().makeTranslation(0, 0.015, 0.3)
       );
 
     camera.matrixAutoUpdate = false;
@@ -78,10 +91,10 @@ export function Airplane(props) {
   return (
     <>
       <group ref={groupRef}>
-        <group {...props} dispose={null} scale={0.2} rotation-y={Math.PI}>
+        <group {...props} dispose={null} scale={0.01} rotation-y={Math.PI}>
           <mesh geometry={nodes.supports.geometry} material={materials['Material.004']} />
           <mesh geometry={nodes.chassis.geometry} material={materials['Material.005']} />
-          <mesh geometry={nodes.helix.geometry} material={materials['Material.005']} ref={helixMeshRef}/>
+          <mesh geometry={nodes.helix.geometry} material={materials['Material.005']} ref={helixMeshRef} />
         </group>
       </group>
     </>

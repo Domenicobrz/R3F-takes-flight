@@ -39,4 +39,8 @@ export function updatePlaneAxis(x, y, z) {
 
   y.applyAxisAngle(x, pitchVelocity);
   z.applyAxisAngle(x, pitchVelocity);
+
+  x.normalize();
+  y.normalize();
+  z.normalize();
 }
