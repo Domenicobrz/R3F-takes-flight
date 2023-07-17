@@ -10,6 +10,7 @@ import { CameraHelper, DirectionalLightHelper } from "three";
 import { useFrame, useThree } from "@react-three/fiber/";
 import { BlurPass, Resizer, KernelSize, Resolution, GaussianBlurPass } from 'postprocessing';
 import { SphereEnv } from "./SphereEnv";
+import { Airplane } from "./Airplane";
 
 let init = false;
 function App() {
@@ -46,9 +47,10 @@ function App() {
       {/* <Environment preset="city" /> */}
 
       <PerspectiveCamera makeDefault fov={45} position={[0, 10, 10]} />
-      <OrbitControls target={[0, 0, 0]} />
+      {/* <OrbitControls target={[0, 0, 0]} /> */}
 
-      <Landscape ref={lightsRef}/>
+      <Landscape ref={lightsRef} />
+      <Airplane />
 
       <directionalLight
         castShadow
@@ -100,19 +102,19 @@ function App() {
 
       <EffectComposer>
 
-      {/* note: by default, it's also including the envmap, so we're creating sphereEnv to offset that */}
-      <SelectiveBloom
-        // lights={[lightRef1, lightRef2]} // ⚠️ REQUIRED! all relevant lights
-        selection={[lightsRef]} // selection of objects that will have bloom effect
-        selectionLayer={10} // selection layer
-        intensity={1.4} // The bloom intensity.
-        blurPass={undefined} // A blur pass.
-        width={Resizer.AUTO_SIZE} // render width
-        height={Resizer.AUTO_SIZE} // render height
-        kernelSize={KernelSize.LARGE} // blur kernel size
-        luminanceThreshold={0.3} // luminance threshold. Raise this value to mask out darker elements in the scene.
-        luminanceSmoothing={0.025} // smoothness of the luminance threshold. Range is [0, 1]
-      />
+        {/* note: by default, it's also including the envmap, so we're creating sphereEnv to offset that */}
+        <SelectiveBloom
+          // lights={[lightRef1, lightRef2]} // ⚠️ REQUIRED! all relevant lights
+          selection={[lightsRef]} // selection of objects that will have bloom effect
+          selectionLayer={10} // selection layer
+          intensity={1.4} // The bloom intensity.
+          blurPass={undefined} // A blur pass.
+          width={Resizer.AUTO_SIZE} // render width
+          height={Resizer.AUTO_SIZE} // render height
+          kernelSize={KernelSize.LARGE} // blur kernel size
+          luminanceThreshold={0.3} // luminance threshold. Raise this value to mask out darker elements in the scene.
+          luminanceSmoothing={0.025} // smoothness of the luminance threshold. Range is [0, 1]
+        />
       </EffectComposer>
     </>
   );
