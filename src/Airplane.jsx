@@ -6,17 +6,18 @@ Command: npx gltfjsx@6.2.7 public/assets/models/airplane.glb
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber';
-import { Matrix3, Matrix4, Vector3 } from 'three';
+import { Matrix3, Matrix4, Quaternion, Vector3 } from 'three';
 import { controls, updatePlaneAxis } from './controls';
 
 const x = new Vector3(1, 0, 0);
 const y = new Vector3(0, 1, 0);
 const z = new Vector3(0, 0, 1);
 
+const delayedRotMatrix = new Matrix4();
+
 export function Airplane(props) {
   const { nodes, materials } = useGLTF('assets/models/airplane.glb');
   const groupRef = useRef();
-  const testBallRef = useRef();
   const helixMeshRef = useRef();
 
   useFrame(({ camera }) => {
@@ -45,14 +46,27 @@ export function Airplane(props) {
     groupRef.current.matrixWorldNeedsUpdate = true;
 
 
-    // const cameraPos = new Vector3(0,0,0);
-    // cameraPos.add(z.clone().multiplyScalar(5));
-    // cameraPos.add(y.clone().multiplyScalar(1));
-    // testBallRef.current.position.copy(cameraPos);
 
-    const cameraMatrix = new Matrix4().multiply(rotMatrix).multiply(new Matrix4().makeRotationX(-0.2)).multiply(
-      new Matrix4().makeTranslation(0, 0.2, 5)
-    );
+
+    var quaternionA = new Quaternion();
+    quaternionA.setFromRotationMatrix(delayedRotMatrix);
+    
+    var quaternionB = new Quaternion();
+    quaternionB.setFromRotationMatrix(rotMatrix);
+
+    var interpolationFactor = 0.175; 
+    var interpolatedQuaternion = new Quaternion().copy(quaternionA);
+    interpolatedQuaternion.slerp(quaternionB, interpolationFactor);
+
+    delayedRotMatrix.identity();
+    delayedRotMatrix.makeRotationFromQuaternion(interpolatedQuaternion);
+
+    const cameraMatrix = new Matrix4()
+      .multiply(delayedRotMatrix)
+      .multiply(new Matrix4().makeRotationX(-0.2))
+      .multiply(
+        new Matrix4().makeTranslation(0, 0.2, 5)
+      );
 
     camera.matrixAutoUpdate = false;
     camera.matrix.copy(cameraMatrix);
@@ -63,11 +77,6 @@ export function Airplane(props) {
 
   return (
     <>
-      <mesh ref={testBallRef}>
-        <sphereGeometry args={[0.1, 30, 30]} />
-        <meshBasicMaterial color={"red"} />
-      </mesh>
-
       <group ref={groupRef}>
         <group {...props} dispose={null} scale={0.2} rotation-y={Math.PI}>
           <mesh geometry={nodes.supports.geometry} material={materials['Material.004']} />
