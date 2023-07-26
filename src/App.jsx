@@ -47,7 +47,7 @@ function App() {
       <Environment background={false} files={"assets/textures/envmap.hdr"} />
       {/* <Environment preset="city" /> */}
 
-      <PerspectiveCamera makeDefault fov={45} position={[0, 10, 10]} />
+      <PerspectiveCamera makeDefault position={[0, 10, 10]} />
       {/* <OrbitControls target={[0, 0, 0]} /> */}
 
       <Landscape ref={lightsRef} />

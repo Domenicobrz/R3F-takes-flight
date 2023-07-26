@@ -10,8 +10,14 @@ window.addEventListener("keyup", (e) => {
 let maxVelocity = 0.04;
 let jawVelocity = 0;
 let pitchVelocity = 0;
+let planeSpeed = 0.006;
+let turbo = 0;
 
-export function updatePlaneAxis(x, y, z) {
+function easeOutQuad(x) {
+  return 1 - (1 - x) * (1 - x);
+}
+
+export function updatePlaneAxis(x, y, z, planePosition, camera) {
   jawVelocity *= 0.95;
   pitchVelocity *= 0.95;
 
@@ -43,4 +49,22 @@ export function updatePlaneAxis(x, y, z) {
   x.normalize();
   y.normalize();
   z.normalize();
+
+
+
+  // plane position & velocity
+  let turboSpeed = 0;
+  if (controls.shift) {
+    turbo += 0.025;
+  } else {
+    turbo *= 0.95;
+  }
+  turbo = Math.min(Math.max(turbo, 0), 1);
+  // turboSpeed = Math.log2(turbo + 1) * 0.01;
+  turboSpeed = easeOutQuad(turbo) * 0.02;
+
+  camera.fov = 45 + turboSpeed * 1500;
+  camera.updateProjectionMatrix();
+
+  planePosition.add(z.clone().multiplyScalar(-planeSpeed -turboSpeed));
 }

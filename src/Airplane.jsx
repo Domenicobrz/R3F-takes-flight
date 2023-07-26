@@ -24,9 +24,7 @@ export function Airplane(props) {
 
   useFrame(({ camera }) => {
 
-    updatePlaneAxis(x, y, z);
-    planePosition.add(z.clone().multiplyScalar(-0.006));
-    // planePosition.add(new Vector3(0,0,1).multiplyScalar(-0.01));
+    updatePlaneAxis(x, y, z, planePosition, camera);
 
     const rotMatrix = new Matrix4().makeBasis(x, y, z);
 
