@@ -12,7 +12,7 @@ function randomPoint(scale) {
     Math.random() * 2 - 1,
     Math.random() * 2 - 1,
     Math.random() * 2 - 1
-  ).multiplyScalar(scale || 1);
+  ).multiply(scale || new Vector3(1, 1, 1));
 }
 
 const TARGET_RAD = 0.125;
@@ -20,9 +20,11 @@ const TARGET_RAD = 0.125;
 export function Targets() {
   const [targets, setTargets] = useState(() => {
     const arr = [];
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 25; i++) {
       arr.push({
-        center: randomPoint().add(new Vector3(0, 1 + Math.random() * 2, 0)),
+        center: randomPoint(new Vector3(4, 1, 4)).add(
+          new Vector3(0, 2 + Math.random() * 2, 0)
+        ),
         direction: randomPoint().normalize(),
         hit: false,
       });
@@ -67,13 +69,12 @@ export function Targets() {
 
     const atLeastOneHit = targets.find((target) => target.hit);
     if (atLeastOneHit) {
-      setTargets(targets.filter(target => !target.hit));      
+      setTargets(targets.filter((target) => !target.hit));
     }
   });
 
   return (
     <mesh geometry={geometry}>
-      {/* <meshBasicMaterial color={"red"} /> */}
       <meshStandardMaterial roughness={0.5} metalness={0.5} />
     </mesh>
   );
