@@ -11,6 +11,7 @@ import { useFrame, useThree } from "@react-three/fiber/";
 import { BlurPass, Resizer, KernelSize, Resolution, GaussianBlurPass } from 'postprocessing';
 import { SphereEnv } from "./SphereEnv";
 import { Airplane } from "./Airplane";
+import { Targets } from "./Targets";
 
 let init = false;
 function App() {
@@ -51,6 +52,7 @@ function App() {
 
       <Landscape ref={lightsRef} />
       <Airplane />
+      <Targets />
 
       <directionalLight
         castShadow
