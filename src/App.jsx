@@ -12,6 +12,7 @@ import { BlurPass, Resizer, KernelSize, Resolution, GaussianBlurPass } from 'pos
 import { SphereEnv } from "./SphereEnv";
 import { Airplane } from "./Airplane";
 import { Targets } from "./Targets";
+import { MotionBlur } from "./MotionBlur";
 
 let init = false;
 function App() {
@@ -105,7 +106,7 @@ function App() {
       <EffectComposer>
 
         {/* note: by default, it's also including the envmap, so we're creating sphereEnv to offset that */}
-        <SelectiveBloom
+        {/* <SelectiveBloom
           // lights={[lightRef1, lightRef2]} // ⚠️ REQUIRED! all relevant lights
           selection={[lightsRef]} // selection of objects that will have bloom effect
           selectionLayer={10} // selection layer
@@ -116,7 +117,8 @@ function App() {
           kernelSize={KernelSize.LARGE} // blur kernel size
           luminanceThreshold={0.3} // luminance threshold. Raise this value to mask out darker elements in the scene.
           luminanceSmoothing={0.025} // smoothness of the luminance threshold. Range is [0, 1]
-        />
+        /> */}
+        <MotionBlur />
       </EffectComposer>
     </>
   );

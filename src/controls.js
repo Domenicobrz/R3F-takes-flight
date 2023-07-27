@@ -11,7 +11,7 @@ let maxVelocity = 0.04;
 let jawVelocity = 0;
 let pitchVelocity = 0;
 let planeSpeed = 0.006;
-let turbo = 0;
+export let turbo = 0;
 
 function easeOutQuad(x) {
   return 1 - (1 - x) * (1 - x);
@@ -71,7 +71,7 @@ export function updatePlaneAxis(x, y, z, planePosition, camera) {
 
   let turboSpeed = easeOutQuad(turbo) * 0.02;
 
-  camera.fov = 45 + turboSpeed * 1500;
+  camera.fov = 45 + turboSpeed * 900;
   camera.updateProjectionMatrix();
 
   planePosition.add(z.clone().multiplyScalar(-planeSpeed -turboSpeed));
