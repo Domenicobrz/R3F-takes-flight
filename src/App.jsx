@@ -1,6 +1,7 @@
 import React from "react";
 import { PerspectiveCamera, Environment } from "@react-three/drei";
-import { EffectComposer } from "@react-three/postprocessing";
+import { EffectComposer, HueSaturation } from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
 import { Landscape } from "./Landscape";
 import { SphereEnv } from "./SphereEnv";
 import { Airplane } from "./Airplane";
@@ -37,6 +38,11 @@ function App() {
 
       <EffectComposer>
         <MotionBlur />
+        <HueSaturation
+          blendFunction={BlendFunction.NORMAL} // blend mode
+          hue={-0.15} // hue in radians
+          saturation={0.1} // saturation in radians
+        />
       </EffectComposer>
     </>
   );
