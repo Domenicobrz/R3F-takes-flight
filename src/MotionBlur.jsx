@@ -1,7 +1,7 @@
-import React, { forwardRef, useMemo } from 'react'
-import { Uniform } from 'three'
-import { Effect } from 'postprocessing'
-import { turbo } from './controls'
+import React, { forwardRef, useMemo } from 'react';
+import { Uniform } from 'three';
+import { Effect } from 'postprocessing';
+import { turbo } from './controls';
 
 // from:
 // https://docs.pmnd.rs/react-postprocessing/effects/custom-effects
@@ -14,10 +14,6 @@ float rand2 (vec2 n) {
 }
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
-
-	// ra = texture2D(inputBuffer, vUvR).ra;
-	// ba = texture2D(inputBuffer, vUvB).ba;
-
   vec2 aspectCorrection = vec2(1.0, aspect);
 
   vec2 dir = normalize(uv - vec2(0.5));
@@ -48,7 +44,6 @@ class MotionBlurImpl extends Effect {
 
   update(renderer, inputBuffer, deltaTime) {
     this.uniforms.get('strength').value = turbo;
-    // this.uniforms.get('strength').value = 1;
   }
 }
 
