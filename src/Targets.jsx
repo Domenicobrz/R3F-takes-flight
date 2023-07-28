@@ -1,8 +1,5 @@
-import { useState } from "react";
-import { useMemo } from "react";
-import { Quaternion } from "three";
-import { TorusGeometry } from "three";
-import { Vector3 } from "three";
+import { useState, useMemo } from "react";
+import { Quaternion, TorusGeometry, Vector3 } from "three";
 import { mergeBufferGeometries } from "three-stdlib";
 import { useFrame } from "@react-three/fiber";
 import { planePosition } from "./Airplane";
