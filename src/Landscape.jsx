@@ -7,7 +7,7 @@ import React, { useEffect, useMemo } from "react";
 import { MeshReflectorMaterial, useGLTF } from "@react-three/drei";
 import { Color, MeshStandardMaterial } from "three";
 
-export function Landscape (props) {
+export function Landscape(props) {
   const { nodes, materials } = useGLTF("assets/models/scene.glb");
 
   const [lightsMaterial, waterMaterial] = useMemo(() => {
@@ -56,23 +56,20 @@ export function Landscape (props) {
   return (
     <group {...props} dispose={null}>
       <mesh
-        castShadow
-        receiveShadow
         geometry={nodes.landscape_gltf.geometry}
         material={materials["Material.009"]}
-        position={[0, -2.6, 0]}
+        castShadow
+        receiveShadow
       />
       <mesh
         geometry={nodes.landscape_borders.geometry}
         material={materials["Material.010"]}
-        position={[0, -2.6, 0]}
       />
       <mesh
-        castShadow
-        receiveShadow
         geometry={nodes.trees_light.geometry}
         material={materials["Material.008"]}
-        position={[0, -2.6, 0]}
+        castShadow
+        receiveShadow
       />
       <mesh
         position={[-2.536, 1.272, 0.79]}
@@ -99,14 +96,12 @@ export function Landscape (props) {
         {waterMaterial}
       </mesh>
       <mesh
-        castShadow
         geometry={nodes.lights.geometry}
         material={lightsMaterial}
-        position={[1.113, 1.482, -0.039]}
-        scale={0.018}
+        castShadow
       />
     </group>
   );
-};
+}
 
 useGLTF.preload("assets/models/scene.glb");
