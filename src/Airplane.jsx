@@ -18,6 +18,8 @@ const delayedRotMatrix = new Matrix4();
 const delayedQuaternion = new Quaternion();
 
 export function Airplane(props) {
+  // thanks to:
+  // https://sketchfab.com/3d-models/vintage-toy-airplane-7de2ecbc0acb4b1886c3df3d196c366b
   const { nodes, materials } = useGLTF('assets/models/airplane.glb');
   const groupRef = useRef();
   const helixMeshRef = useRef();
