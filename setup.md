@@ -1,5 +1,7 @@
 npm create vite@latest
 // follow the prompts and make a Javascript & React project
+// and then run: to get the dependencies from vite
+npm install 
 
 npm i @react-three/drei@9.74.14 -E
 npm i @react-three/fiber@8.12.0 -E
