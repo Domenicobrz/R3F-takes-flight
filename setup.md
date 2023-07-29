@@ -1,4 +1,5 @@
-
+npm create vite@latest
+// follow the prompts and make a Javascript & React project
 
 npm i @react-three/drei@9.74.14 -E
 npm i @react-three/fiber@8.12.0 -E
