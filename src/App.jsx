@@ -2,6 +2,7 @@ import React from "react";
 import { PerspectiveCamera, Environment, OrbitControls } from "@react-three/drei";
 import { SphereEnv } from "./SphereEnv";
 import { Landscape } from "./Landscape";
+import { Airplane } from "./Airplane";
 
 function App() {
   return (
@@ -10,9 +11,10 @@ function App() {
       <Environment background={false} files={"assets/textures/envmap.hdr"} />
 
       <PerspectiveCamera makeDefault position={[0, 10, 10]} />
-      <OrbitControls target={[0, 0, 0]}/>
+      {/* <OrbitControls target={[0, 0, 0]}/> */}
 
       <Landscape />  
+      <Airplane />
 
       <directionalLight
         castShadow
